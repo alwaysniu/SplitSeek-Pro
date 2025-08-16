@@ -8,7 +8,7 @@
 1. Download `SplitSeek-Pro`
 
 ```bash
-git clone https://github.com/pkwyx/SplitSeek-Pro.git
+git clone https://github.com/alwaysniu/SplitSeek-Pro.git
 cd SplitSeek-Pro
 ```
 
