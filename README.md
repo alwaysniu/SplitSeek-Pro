@@ -50,15 +50,13 @@ python run.py -i examples/inputs/multi -o examples/outputs/multi
 
 ## Tips
 
-1. In all tests, we found that the predicted score is most representative of the feasibility of splitting between residue n and residue n+1.
+1. The predicted score at residue n corresponds to the feasibility of splitting the protein between residues n and residue n+1.
 
-2. Continuous regions with ≥3 consecutive residues scoring above 0.8 generally indicate high splitting feasibility.
+2. Continuous regions with ≥3 consecutive residues scoring above 0.8 generally indicate high splitting feasibility. Single high-scoring residues within a continuous region are less likely to be practically feasible.
 
-3. Single high-scoring residues within a continuous region are less likely to be practically feasible.
+3. The model was trained in two stages: (1) pretraining on computational splitting probability dataset and (2) fine-tuning on circular permutation data from structurally similar proteins. Because the fine-tuning dataset is derived from circular permutation examples, predictions are biased toward identifying sites for circular permutation.
 
-4. The model was trained in two stages: Pretraining on a split–reconstitution dataset while fine-tuning on circular permutation data from structurally similar proteins. Because the fine-tuning dataset is derived from circular permutation examples, predictions are especially suited for circular permutation site identification.
-
-5. Predictions tend to be more reliable for proteins with fewer than 400 residues.
+4. Predictions tend to be more reliable for proteins with fewer than 400 residues.
 
 ## Reference
 
