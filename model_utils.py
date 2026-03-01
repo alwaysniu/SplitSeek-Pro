@@ -261,7 +261,6 @@ class DecLayer(nn.Module):
         return h_V
 
 class PositionalEncodings(nn.Module):
-    # 相对位置编码，用64个独热编码表示链内的相对位置（若相隔特别远，都是0或64，不做区分）
     def __init__(self, num_embeddings, max_relative_feature=32):
         super(PositionalEncodings, self).__init__()
         self.num_embeddings = num_embeddings
@@ -300,12 +299,12 @@ class ProteinFeatures(nn.Module):
 
     def _dist(self, X, mask, eps=1E-6):
         mask_2D = torch.unsqueeze(mask,1) * torch.unsqueeze(mask,2)
-        dX = torch.unsqueeze(X,1) - torch.unsqueeze(X,2)  # [B,1,N,3] - [B,N,1,3] = [B,N,N,3] 计算所有坐标点之间的向量差
-        D = mask_2D * torch.sqrt(torch.sum(dX**2, 3) + eps)  # 计算向量差距离
+        dX = torch.unsqueeze(X,1) - torch.unsqueeze(X,2)  # [B,1,N,3] - [B,N,1,3] = [B,N,N,3] 
+        D = mask_2D * torch.sqrt(torch.sum(dX**2, 3) + eps) 
         D_max, _ = torch.max(D, -1, keepdim=True)
         D_adjust = D + (1. - mask_2D) * D_max
         sampled_top_k = self.top_k
-        D_neighbors, E_idx = torch.topk(D_adjust, np.minimum(self.top_k, X.shape[1]), dim=-1, largest=False)  # 找到距离最小的k个近邻残基
+        D_neighbors, E_idx = torch.topk(D_adjust, np.minimum(self.top_k, X.shape[1]), dim=-1, largest=False) 
 
         return D_neighbors, E_idx
     
@@ -388,7 +387,7 @@ class ProteinFeatures(nn.Module):
 
         d_chains = ((chain_labels[:, :, None] - chain_labels[:,None,:])==0).long() #find self vs non-self interaction
         E_chains = gather_edges(d_chains[:,:,:,None], E_idx)[:,:,:,0]
-        E_positional = self.embeddings(offset.long(), E_chains)  # 相对位置编码
+        E_positional = self.embeddings(offset.long(), E_chains)
         E = torch.cat((E_positional, RBF_all), -1)
         E = self.edge_embedding(E)
         E = self.norm_edges(E)
