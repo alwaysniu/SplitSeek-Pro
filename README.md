@@ -58,6 +58,10 @@ python run.py -i examples/inputs/multi -o examples/outputs/multi
 
 4. Predictions tend to be more reliable for proteins with fewer than 400 residues.
 
+## Data 
+
+The fine-tuning data could be downloaded from the [website](https://zenodo.org/records/17421132).
+
 ## Reference
 
 [Accurate Prediction of Splittable Sites on Protein Structures]
